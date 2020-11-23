@@ -17,6 +17,9 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Flux<String> nombres = Flux.just("Jose", "Luis", "Juana")
+                .doOnNext(System.out::println);
 
+        nombres.subscribe();
     }
 }
