@@ -22,13 +22,22 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Flux<Usuario> nombres = Flux.just("Jose", "Luis", "Carlos", "Juana")
-                .map(nombre -> new Usuario(nombre.toUpperCase(), null))
+        Flux<Usuario> nombres = Flux.just("Jose Usuga", "Luis Perez", "Carlos Guerra",
+                "Juana Herrera", "Raul Duque", "Andres Gonzales")
+                .map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(),
+                        nombre.split(" ")[1].toUpperCase()))
+                .filter(usuario ->
+                        usuario.getNombre().toLowerCase().equals("juana"))
+                /*
+                 * Lo que se aplica antes del doOnNext, son filtros, los cuales sólo entraran o seran
+                 * tomados en las posteriores ejecuciones
+                 * */
                 .doOnNext(usuario -> {
                     if (usuario == null)
                         throw new RuntimeException("Los nombres no pueden estar vacios");
 
-                    System.out.println(usuario.getNombre());
+                    System.out.println(usuario.getNombre().concat(" ")
+                            .concat(usuario.getApellido()));
                 }).map(usuario -> {
                     String nombre = usuario.getNombre().toLowerCase();
                     usuario.setNombre(nombre);
